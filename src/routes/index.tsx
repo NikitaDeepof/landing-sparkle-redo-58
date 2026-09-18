@@ -1,40 +1,49 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
+const tabs = [["who","Кто мы"],["why-now","Почему"],["inside","Внутри"],["difference","Отличия"],["selection","Отбор"],["commitment","Время"],["pricing","Тарифы"],["process","Процесс"],["faq","Вопросы"],["final","Заявка"]] as const;
+export const Route=createFileRoute("/")({head:()=>({meta:[{title:"DeepOF — система, а не курс"},{name:"description",content:"DeepOF: AI-инструмент для продаж, сеть подрядчиков и структура команды, которая работает в OnlyFans каждый день."},{property:"og:title",content:"DeepOF — система, а не курс"},{property:"og:description",content:"DeepOF: AI-инструмент для продаж, сеть подрядчиков и структура команды, которая работает в OnlyFans каждый день."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}),component:Index});
+function Index(){const [active,setActive]=useState("who");const [sticky,setSticky]=useState(false);useEffect(()=>{document.body.classList.add("loaded");const qs=[...document.querySelectorAll<HTMLButtonElement>(".faq-question")];const cleanups=qs.map(btn=>{const click=()=>{const expanded=btn.getAttribute("aria-expanded")==="true";qs.forEach(other=>{other.setAttribute("aria-expanded","false");document.getElementById(other.getAttribute("aria-controls")||"")?.classList.remove("open")});if(!expanded){btn.setAttribute("aria-expanded","true");document.getElementById(btn.getAttribute("aria-controls")||"")?.classList.add("open")}};btn.addEventListener("click",click);return()=>btn.removeEventListener("click",click)});const form=document.getElementById("applyForm") as HTMLFormElement|null;const submit=(e:Event)=>{e.preventDefault();form?.classList.add("hidden");document.getElementById("formSuccess")?.classList.add("visible")};form?.addEventListener("submit",submit);const scroll=()=>{const sections=tabs.map(([id])=>document.getElementById(id)).filter((x):x is HTMLElement=>Boolean(x));let current=sections[0];const y=scrollY+innerHeight*.35;sections.forEach(x=>{if(x.offsetTop<=y)current=x});if(current)setActive(current.id);const hero=document.getElementById("hero-section"),fs=document.getElementById("form");if(hero&&fs)setSticky(hero.getBoundingClientRect().bottom<0&&fs.getBoundingClientRect().top>innerHeight*.2)};addEventListener("scroll",scroll,{passive:true});scroll();return()=>{cleanups.forEach(f=>f());form?.removeEventListener("submit",submit);removeEventListener("scroll",scroll);document.body.classList.remove("loaded")}},[]);return <><div className="noise" aria-hidden="true"/><nav className="file-tabs" aria-label="Разделы страницы">{tabs.map(([id,label])=><a key={id} className={`tab ${active===id?"active":""}`} href={`#${id}`}>{label}</a>)}</nav>
 
-const tabs = [
-  ["who", "Кто мы"], ["why-now", "Почему"], ["inside", "Внутри"],
-  ["difference", "Отличия"], ["selection", "Отбор"], ["commitment", "Время"],
-  ["pricing", "Тарифы"], ["process", "Процесс"], ["faq", "Вопросы"], ["final", "Заявка"],
-] as const;
 
-const faqAnswers = [
-  "Нет. Материалы и сеть подрядчиков рассчитаны на то, что ты начинаешь без готовых знаний о трафике и запуске.",
-  "Мы не называем цифру заранее — слишком много переменных зависит от вовлечённости и модели. На созвоне разберём экономику конкретно под твою ситуацию.",
-  "Кроме знаний, ты получаешь инструмент (Charme) и готовую сеть подрядчиков — то, что можно использовать сразу, а не только прочитать.",
-  "Подбор формата происходит на созвоне до оплаты — именно чтобы не ошибиться с выбором.",
-  "Вернём деньги, если в течение недели поймёшь, что это тяжело и тебе не подходит.",
-] as const;
 
-export const Route = createFileRoute("/")({
-  head: () => ({ meta: [
-    { title: "DeepOF — система, а не курс" },
-    { name: "description", content: "DeepOF: AI-инструмент для продаж, сеть подрядчиков и структура команды, которая работает в OnlyFans каждый день." },
-    { property: "og:title", content: "DeepOF — система, а не курс" },
-    { property: "og:description", content: "DeepOF: AI-инструмент для продаж, сеть подрядчиков и структура команды, которая работает в OnlyFans каждый день." },
-    { property: "og:type", content: "website" },
-    { name: "twitter:card", content: "summary_large_image" },
-  ] }),
-  component: Index,
-});
+<main>
+<div className="wrap">
+  <header>
+    <div className="mark">Deep<span>OF</span></div>
+    <div className="header-right">
+      <a href="https://t.me/+IgSSjYF2dXM2NzRi" target="_blank" rel="noopener" className="header-tg">Telegram</a>
+      <a href="#form" className="btn btn-outline btn-small">Оставить заявку</a>
+    </div>
+  </header>
 
-function SectionNavigation({ active }: { active: string }) {
-  return ;
-}
+  
+  <section className="no-border hero-section" id="hero-section">
+    <div className="hero-main">
+      <span className="stamp">Система · закрытый доступ</span>
+      <p className="kicker">Открываем часть системы</p>
+      <h1>Мы работаем в OnlyFans каждый день. Сейчас — открываем доступ к полной практической системе, а не только к знаниям.</h1>
+      <p className="hero-lead">DeepOF — это свой AI-инструмент для продаж, готовая сеть подрядчиков по трафику и моделям, и структура, по которой работает команда. Не курс о том, как это делается. Система, которую можно включить.</p>
+      <div className="hero-cta">
+        <a href="#inside" className="btn">Узнать, что внутри</a>
+      </div>
+      <p className="hero-micro">Три формата участия — от <span className="fig">$449</span></p>
+    </div>
 
-function Faq() {
-  const [open, setOpen] = useState<number | null>(null);
-  const questions = ["Нужен ли опыт для старта?", "Сколько можно заработать?", "Чем это отличается от других наставничеств?", "Что если мне не подойдёт формат, который я выбрал?", "А если я начну и пойму, что это не моё?"];
-  return <Faq />
+    <div className="stat-strip">
+      <div><div className="stat-num">$449</div><div className="stat-label">Старт, три формата</div></div>
+      <div><div className="stat-num">11</div><div className="stat-label">Модулей знаний</div></div>
+      <div><div className="stat-num">1.5 года</div><div className="stat-label">Charme в разработке</div></div>
+    </div>
+
+    <div className="hero-flow">
+      <div className="flow" aria-hidden="true">
+        <span className="flow-step key">Charme</span>
+        <span className="flow-arrow">→</span>
+        <span className="flow-step">Сеть подрядчиков</span>
+        <span className="flow-arrow">→</span>
+        <span className="flow-step">Структура и знания</span>
+      </div>
+    </div>
   </section>
 
   
@@ -237,7 +246,7 @@ function Faq() {
   
   <section id="guarantee">
     <div className="guarantee-box">
-      <div><div className="guarantee-seal"><b>7</b>дней<br>гарантии</div></div>
+      <div><div className="guarantee-seal"><b>7</b>дней<br />гарантии</div></div>
       <div>
         <h3>Если за первую неделю поймёшь, что это не твоё — вернём деньги</h3>
         <p>Без уговоров. Мы отбираем участников заранее именно для того, чтобы почти никто не пользовался этим пунктом — но он есть.</p>
@@ -381,7 +390,13 @@ function Faq() {
   <section className="no-border" id="form">
     <div id="form-card">
       <h2 className="form-title">Оставить заявку</h2>
-      <ApplicationForm />
+      <form id="applyForm" noValidate>
+        <div className="form-field"><label htmlFor="f-name">Имя</label><input type="text" id="f-name" name="name" required autocomplete="name" /></div>
+        <div className="form-field"><label htmlFor="f-contact">Telegram или телефон</label><input type="text" id="f-contact" name="contact" required autocomplete="tel" /></div>
+        <div className="form-field"><label htmlFor="f-comment">Комментарий (необязательно)</label><textarea id="f-comment" name="comment" rows="3"></textarea></div>
+        <button type="submit" className="btn">Отправить заявку</button>
+      </form>
+      <div className="form-success" id="formSuccess" role="status">Заявка получена. Мы свяжемся с тобой в течение дня.</div>
     </div>
   </section>
 
@@ -393,9 +408,4 @@ function Faq() {
 </div>
 </main>
 
-<div className="sticky-bar" id="stickyBar">
-  <span className="left">DeepOF — три формата участия, от $449</span>
-  <a href="#form" className="btn btn-small">Оставить заявку</a>
-</div>
-<div className={`sticky-bar ${sticky ? "show" : ""}`} id="stickyBar"><span className="left">DeepOF — три формата участия, от $449</span><a href="#form" className="btn btn-small">Оставить заявку</a></div></>;
-}
+<div className={`sticky-bar ${sticky?"show":""}`}><span className="left">DeepOF — три формата участия, от $449</span><a href="#form" className="btn btn-small">Оставить заявку</a></div></>;}
