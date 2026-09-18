@@ -391,9 +391,9 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
     <div id="form-card">
       <h2 className="form-title">Оставить заявку</h2>
       <form id="applyForm" noValidate>
-        <div className="form-field"><label htmlFor="f-name">Имя</label><input type="text" id="f-name" name="name" required autocomplete="name" /></div>
-        <div className="form-field"><label htmlFor="f-contact">Telegram или телефон</label><input type="text" id="f-contact" name="contact" required autocomplete="tel" /></div>
-        <div className="form-field"><label htmlFor="f-comment">Комментарий (необязательно)</label><textarea id="f-comment" name="comment" rows="3"></textarea></div>
+        <div className="form-field"><label htmlFor="f-name">Имя</label><input type="text" id="f-name" name="name" required autoComplete="name" /></div>
+        <div className="form-field"><label htmlFor="f-contact">Telegram или телефон</label><input type="text" id="f-contact" name="contact" required autoComplete="tel" /></div>
+        <div className="form-field"><label htmlFor="f-comment">Комментарий (необязательно)</label><textarea id="f-comment" name="comment" rows={3}></textarea></div>
         <button type="submit" className="btn">Отправить заявку</button>
       </form>
       <div className="form-success" id="formSuccess" role="status">Заявка получена. Мы свяжемся с тобой в течение дня.</div>
