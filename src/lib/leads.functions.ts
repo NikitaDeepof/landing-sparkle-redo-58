@@ -81,7 +81,7 @@ export const submitLead = createServerFn({ method: "POST" })
 
     const telegramError = await sendTelegram(text);
 
-    await supabaseAdmin
+    await db
       .from("leads")
       .update({ telegram_sent: telegramError === null, telegram_error: telegramError })
       .eq("id", inserted.id);
