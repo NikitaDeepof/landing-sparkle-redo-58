@@ -1,5 +1,20 @@
 import { createServerFn } from "@tanstack/react-start";
+import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
+import type { Database } from "@/integrations/supabase/types";
+
+// Independent Supabase project (not Lovable Cloud). The anon key is
+// publishable by design; inserts are allowed by an RLS INSERT policy on
+// public.leads (see the SQL snippet in the project docs).
+const SUPABASE_URL = "https://rbamwvttxjmbiflfszfz.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYW13dnR0eGptYmlmbGZzemZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3MzU3MzcsImV4cCI6MjEwNTMxMTczN30.W_WlRSYBSC1hrOa5Cg39bVX2rWJ9rDzW_PmRkWy_S8s";
+
+function supabaseLeads() {
+  return createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+  });
+}
 
 const leadSchema = z.object({
   name: z.string().trim().min(1).max(200),
@@ -44,9 +59,9 @@ function escapeHtml(value: string) {
 export const submitLead = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => leadSchema.parse(data))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const db = supabaseLeads();
 
-    const { data: inserted, error } = await supabaseAdmin
+    const { data: inserted, error } = await db
       .from("leads")
       .insert({ name: data.name, contact: data.contact, comment: data.comment || null })
       .select("id")
