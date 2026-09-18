@@ -7,23 +7,18 @@ const leadSchema = z.object({
   comment: z.string().trim().max(2000).optional().default(""),
 });
 
-const CHAT_ID = "8916545442";
-const GATEWAY_URL = "https://connector-gateway.lovable.dev/telegram";
+const DEFAULT_CHAT_ID = "8916545442";
 
 async function sendTelegram(text: string): Promise<string | null> {
-  const lovableKey = process.env["LOVABLE_API_KEY"];
-  const telegramKey = process.env["TELEGRAM_API_KEY"];
-  if (!lovableKey || !telegramKey) return "Telegram connection is not configured";
+  const botToken = process.env["TELEGRAM_BOT_TOKEN"];
+  const chatId = process.env["TELEGRAM_CHAT_ID"] || DEFAULT_CHAT_ID;
+  if (!botToken) return "TELEGRAM_BOT_TOKEN is not configured";
 
   try {
-    const response = await fetch(`${GATEWAY_URL}/sendMessage`, {
+    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${lovableKey}`,
-        "X-Connection-Api-Key": telegramKey,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: "HTML" }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" }),
     });
     if (!response.ok) {
       const body = await response.text();
