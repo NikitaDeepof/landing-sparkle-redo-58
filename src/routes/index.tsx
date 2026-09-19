@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { submitLead } from "@/lib/leads.functions";
 const tabs = [["who","Кто мы"],["why-now","Почему"],["inside","Внутри"],["difference","Отличия"],["selection","Отбор"],["commitment","Время"],["pricing","Тарифы"],["process","Процесс"],["faq","Вопросы"],["final","Заявка"]] as const;
-export const Route=createFileRoute("/")({head:()=>({meta:[{title:"DeepOF — система, а не курс"},{name:"description",content:"DeepOF: AI-инструмент для продаж, сеть подрядчиков и структура команды, которая работает в OnlyFans каждый день."},{property:"og:title",content:"DeepOF — система, а не курс"},{property:"og:description",content:"DeepOF: AI-инструмент для продаж, сеть подрядчиков и структура команды, которая работает в OnlyFans каждый день."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}),component:Index});
-function Index(){const [active,setActive]=useState("who");const [sticky,setSticky]=useState(false);const [sending,setSending]=useState(false);const [formError,setFormError]=useState("");const send=useServerFn(submitLead);const sendRef=useRef(send);sendRef.current=send;useEffect(()=>{document.body.classList.add("loaded");const qs=[...document.querySelectorAll<HTMLButtonElement>(".faq-question")];const cleanups=qs.map(btn=>{const click=()=>{const expanded=btn.getAttribute("aria-expanded")==="true";qs.forEach(other=>{other.setAttribute("aria-expanded","false");document.getElementById(other.getAttribute("aria-controls")||"")?.classList.remove("open")});if(!expanded){btn.setAttribute("aria-expanded","true");document.getElementById(btn.getAttribute("aria-controls")||"")?.classList.add("open")}};btn.addEventListener("click",click);return()=>btn.removeEventListener("click",click)});const form=document.getElementById("applyForm") as HTMLFormElement|null;const submit=(e:Event)=>{e.preventDefault();if(!form)return;const fd=new FormData(form);const name=String(fd.get("name")||"").trim();const contact=String(fd.get("contact")||"").trim();const comment=String(fd.get("comment")||"").trim();if(!name||!contact){setFormError("Заполни имя и контакт.");return}setFormError("");setSending(true);sendRef.current({data:{name,contact,comment}}).then(()=>{form.classList.add("hidden");document.getElementById("formSuccess")?.classList.add("visible")}).catch(()=>{setFormError("Не удалось отправить заявку. Попробуй ещё раз или напиши нам в Telegram.")}).finally(()=>setSending(false))};form?.addEventListener("submit",submit);const scroll=()=>{const sections=tabs.map(([id])=>document.getElementById(id)).filter((x):x is HTMLElement=>Boolean(x));let current=sections[0];const y=scrollY+innerHeight*.35;sections.forEach(x=>{if(x.offsetTop<=y)current=x});if(current)setActive(current.id);const hero=document.getElementById("hero-section"),fs=document.getElementById("form");if(hero&&fs)setSticky(hero.getBoundingClientRect().bottom<0&&fs.getBoundingClientRect().top>innerHeight*.2)};addEventListener("scroll",scroll,{passive:true});scroll();return()=>{cleanups.forEach(f=>f());form?.removeEventListener("submit",submit);removeEventListener("scroll",scroll);document.body.classList.remove("loaded")}},[]);return <><div className="noise" aria-hidden="true"/><nav className="file-tabs" aria-label="Разделы страницы">{tabs.map(([id,label])=><a key={id} className={`tab ${active===id?"active":""}`} href={`#${id}`}>{label}</a>)}</nav>
+export const Route=createFileRoute("/")({head:()=>({meta:[{title:"DeepOF — система для запуска агентства креаторов"},{name:"description",content:"AI-инструмент для продаж в переписке, сеть подрядчиков по трафику и 11 модулей по управлению агентством в creator economy. Три формата наставничества."},{property:"og:title",content:"DeepOF — система, а не курс"},{property:"og:description",content:"AI-инструмент для продаж в переписке, сеть подрядчиков по трафику и 11 модулей по управлению агентством в creator economy. Три формата наставничества."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}),component:Index});
+function Index(){const [active,setActive]=useState("who");const [sticky,setSticky]=useState(false);const [sending,setSending]=useState(false);const [formError,setFormError]=useState("");const [privacyOpen,setPrivacyOpen]=useState(false);const send=useServerFn(submitLead);const sendRef=useRef(send);sendRef.current=send;useEffect(()=>{const checkHash=()=>setPrivacyOpen(location.hash==="#privacy");checkHash();addEventListener("hashchange",checkHash);return()=>removeEventListener("hashchange",checkHash)},[]);useEffect(()=>{document.body.classList.add("loaded");const qs=[...document.querySelectorAll<HTMLButtonElement>(".faq-question")];const cleanups=qs.map(btn=>{const click=()=>{const expanded=btn.getAttribute("aria-expanded")==="true";qs.forEach(other=>{other.setAttribute("aria-expanded","false");document.getElementById(other.getAttribute("aria-controls")||"")?.classList.remove("open")});if(!expanded){btn.setAttribute("aria-expanded","true");document.getElementById(btn.getAttribute("aria-controls")||"")?.classList.add("open")}};btn.addEventListener("click",click);return()=>btn.removeEventListener("click",click)});const form=document.getElementById("applyForm") as HTMLFormElement|null;const submit=(e:Event)=>{e.preventDefault();if(!form)return;const fd=new FormData(form);const name=String(fd.get("name")||"").trim();const contact=String(fd.get("contact")||"").trim();const comment=String(fd.get("comment")||"").trim();if(!name||!contact){setFormError("Заполни имя и контакт.");return}setFormError("");setSending(true);sendRef.current({data:{name,contact,comment}}).then(()=>{form.classList.add("hidden");document.getElementById("formSuccess")?.classList.add("visible")}).catch(()=>{setFormError("Не удалось отправить заявку. Попробуй ещё раз или напиши нам в Telegram.")}).finally(()=>setSending(false))};form?.addEventListener("submit",submit);const scroll=()=>{const sections=tabs.map(([id])=>document.getElementById(id)).filter((x):x is HTMLElement=>Boolean(x));let current=sections[0];const y=scrollY+innerHeight*.35;sections.forEach(x=>{if(x.offsetTop<=y)current=x});if(current)setActive(current.id);const hero=document.getElementById("hero-section"),fs=document.getElementById("form");if(hero&&fs)setSticky(hero.getBoundingClientRect().bottom<0&&fs.getBoundingClientRect().top>innerHeight*.2)};addEventListener("scroll",scroll,{passive:true});scroll();return()=>{cleanups.forEach(f=>f());form?.removeEventListener("submit",submit);removeEventListener("scroll",scroll);document.body.classList.remove("loaded")}},[]);return <><div className="noise" aria-hidden="true"/><nav className="file-tabs" aria-label="Разделы страницы">{tabs.map(([id,label])=><a key={id} className={`tab ${active===id?"active":""}`} href={`#${id}`}>{label}</a>)}</nav>
 
 
 
@@ -23,8 +23,8 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
     <div className="hero-main">
       <span className="stamp">Система · закрытый доступ</span>
       <p className="kicker">Открываем часть системы</p>
-      <h1>Мы работаем в OnlyFans каждый день. Сейчас — открываем доступ к полной практической системе, а не только к знаниям.</h1>
-      <p className="hero-lead">DeepOF — это свой AI-инструмент для продаж, готовая сеть подрядчиков по трафику и моделям, и структура, по которой работает команда. Не курс о том, как это делается. Система, которую можно включить.</p>
+      <h1>Мы ведём агентство креаторов каждый день. Теперь открываем доступ к полной практической системе, а не только к знаниям.</h1>
+      <p className="hero-lead">DeepOF — это свой AI-инструмент для продаж в переписке, проверенная сеть подрядчиков по трафику и структура, по которой работает наша команда. Не курс о том, как это делается. Система, которую можно включить.</p>
       <div className="hero-cta">
         <a href="#inside" className="btn">Узнать, что внутри</a>
       </div>
@@ -55,7 +55,7 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
       <h2>Не образовательная компания по продаже инфобизнеса</h2>
     </div>
     <div className="body">
-      <p>У нас есть команда, которая работает в OnlyFans на практике — трафик, модели, продажи внутри переписки, экономика проектов. Это наш основной бизнес, а не витрина для продажи курсов. Мы не строили карьеру вокруг обучения других. Большую часть времени нас вообще не видно — мы работаем, а не выступаем.</p>
+      <p>У нас есть команда, которая работает в creator economy на практике: трафик, партнёрства с креаторами, продажи в переписке с подписчиками, экономика проектов и управление командой. Это наш основной бизнес, а не витрина для продажи курсов. Мы не строили карьеру вокруг обучения других. Большую часть времени нас вообще не видно — мы работаем, а не выступаем.</p>
       <p className="pull">DeepOF — это редкий момент, когда мы решили открыть часть своей системы.</p>
     </div>
   </section>
@@ -83,17 +83,17 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
       <div className="charme-copy">
         <span className="pillar-tag">Инструмент</span>
         <h3>Charme</h3>
-        <p>Наш собственный AI-инструмент для переписки с фанатами. Он обучался на топовых чатах полтора года и продолжает дорабатываться каждый месяц. Сейчас Charme выдаёт три варианта ответа в моменте переписки — чаттер видит все пути сразу и может выбрать неочевидный.</p>
+        <p>Наш собственный AI-инструмент для продаж в переписке с подписчиками. Он обучен на лучших диалогах продаж полтора года и продолжает дорабатываться каждый месяц. Сейчас Charme выдаёт три варианта ответа в моменте переписки — менеджер чатов видит все пути сразу и может выбрать неочевидный.</p>
 
         <div className="mock" aria-hidden="true">
           <div className="mock-bar"><span className="live"></span><span></span><span></span><span className="mock-title">Charme</span></div>
           <div className="mock-label">Входящее сообщение</div>
-          <div className="mock-msg-in">Когда новый контент? 👀</div>
+          <div className="mock-msg-in">Привет! Что входит в подписку в этом месяце?</div>
           <div className="mock-label">Charme предлагает 3 варианта</div>
           <div className="mock-replies">
-            <div className="mock-reply"><span>Активная продажа</span><span className="tag">01</span></div>
-            <div className="mock-reply"><span>Глубокий диалог</span><span className="tag">02</span></div>
-            <div className="mock-reply"><span>Глубокий флирт</span><span className="tag">03</span></div>
+            <div className="mock-reply"><span>Продажа</span><span className="tag">01</span></div>
+            <div className="mock-reply"><span>Вовлечение</span><span className="tag">02</span></div>
+            <div className="mock-reply"><span>Удержание</span><span className="tag">03</span></div>
           </div>
         </div>
       </div>
@@ -115,13 +115,13 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
           <div className="feat-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M5 19V13M12 19V9M19 19V5"/></svg>
           </div>
-          <div><h4>Средний чаттер работает как профи</h4><p>Двое средних чаттеров с Charme — как два сильных. Инструмент поднимает уровень, а не заменяет решение.</p></div>
+          <div><h4>Средний менеджер чатов работает как профи</h4><p>Двое средних менеджеров чатов с Charme — как два сильных. Инструмент поднимает уровень, а не заменяет решение.</p></div>
         </div>
         <div className="feat-item">
           <div className="feat-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="4" rx="1"/><rect x="4" y="10" width="16" height="4" rx="1"/><rect x="4" y="16" width="10" height="4" rx="1"/></svg>
           </div>
-          <div><h4>Скоро — три стиля ответа</h4><p>Активная продажа, глубокий диалог, глубокий флирт: каждый из трёх вариантов получит собственный стиль.</p></div>
+          <div><h4>Скоро — три стиля ответа</h4><p>Продажа, вовлечение, удержание: каждый из трёх вариантов получит собственный стиль.</p></div>
         </div>
         <div className="feat-item">
           <div className="feat-icon">
@@ -145,7 +145,7 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
         </svg>
         <span className="pillar-tag">Сеть</span>
         <h3>Сеть подрядчиков</h3>
-        <p>Не нужно самостоятельно разбираться в Reddit, Twitter, SFS или GG-трафике, чтобы начать. У нас есть готовая сеть подрядчиков, с которыми можно запускать трафик уже завтра. То же самое — с покупкой моделей: мы знаем, где это делать без лишних рисков.</p>
+        <p>Не нужно самостоятельно разбираться в трафике из Reddit, X и кросс-промо, чтобы начать. У нас есть проверенные подрядчики, с которыми можно запускать трафик уже завтра. То же с партнёрствами: знаем, где находить совершеннолетних креаторов, готовых к сотрудничеству.</p>
       </div>
 
       <div className="pillar-card">
@@ -209,7 +209,7 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
       <div className="qualify-col no">
         <h4>Не к нам, если</h4>
         <ul>
-          <li>Ждёшь, что кнопка «бабло» сама нажмётся</li>
+          <li>Ждёшь, что результат появится сам, без твоей работы</li>
           <li>Ищешь готовое решение без усилий</li>
         </ul>
       </div>
@@ -242,7 +242,7 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
       </div>
     </div>
 
-    <p className="pull">Глубина и частота отличаются по пакетам, но даже на старте мы закладываем достаточно времени, чтобы по-настоящему разобраться и начать зарабатывать — а не бросаем сразу после лекций.</p>
+    <p className="pull">Глубина и частота отличаются по пакетам, но даже на старте мы закладываем достаточно времени, чтобы по-настоящему разобраться и выйти на первые результаты — а не бросаем сразу после лекций.</p>
   </section>
 
   
@@ -275,7 +275,7 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
           <li>Месяц обучения с еженедельными созвонами</li>
           <li>Ещё месяц сопровождения после обучения — не остаёшься один на один с первыми результатами</li>
         </ul>
-        <p className="price-note">Даже на старте у тебя достаточно нашего времени, чтобы разобраться и начать зарабатывать.</p>
+        <p className="price-note">Даже на старте у тебя достаточно нашего времени, чтобы разобраться и выйти на первые результаты.</p>
         <a href="#form" className="btn btn-outline">Оставить заявку</a>
       </div>
 
@@ -348,7 +348,7 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
           <span className="faq-index">02</span><span className="q">Сколько можно заработать?</span><span className="faq-icon" aria-hidden="true">+</span>
         </button>
         <div className="faq-answer" id="faq-a-2" role="region" aria-labelledby="faq-q-2">
-          <div className="faq-answer-inner">Мы не называем цифру заранее — слишком много переменных зависит от вовлечённости и модели. На созвоне разберём экономику конкретно под твою ситуацию.</div>
+          <div className="faq-answer-inner">Мы не называем цифру заранее — слишком много переменных зависит от вовлечённости и модели. На созвоне разберём экономику конкретно под твою ситуацию. Мы не гарантируем доход: результат зависит от твоих действий, вложений и ситуации на рынке.</div>
         </div>
       </div>
       <div className="faq-item">
@@ -383,7 +383,7 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
     <div className="final-card">
       <div className="sec-num">10</div>
       <h2>Мы работаем. Сейчас — можно зайти вместе с нами.</h2>
-      <p>Система собрана полностью впервые: инструмент, сеть, знания. Это не повторится в том же виде — Charme продолжит меняться, сеть будет расти, а команда снова вернётся к своей обычной работе, когда набор закроется.</p>
+      <p>Система собрана полностью впервые: инструмент, сеть, знания. Мы ведём ограниченное число участников одновременно — время команды не масштабируется. Когда места в потоке заканчиваются, набор закрывается до следующего.</p>
       <a href="#form" className="btn">Оставить заявку</a>
     </div>
   </section>
@@ -397,6 +397,7 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
         <div className="form-field"><label htmlFor="f-contact">Telegram или телефон</label><input type="text" id="f-contact" name="contact" required autoComplete="tel" /></div>
         <div className="form-field"><label htmlFor="f-comment">Комментарий (необязательно)</label><textarea id="f-comment" name="comment" rows={3}></textarea></div>
         <button type="submit" className="btn" disabled={sending}>{sending?"Отправляем…":"Отправить заявку"}</button>
+        <p className="form-consent" style={{marginTop:"12px",fontSize:"13px",opacity:.7}}>Отправляя заявку, вы соглашаетесь с <a href="#privacy" onClick={()=>setPrivacyOpen(true)}>Политикой конфиденциальности</a> и подтверждаете, что вам есть 18 лет.</p>
         {formError&&<p className="form-error" role="alert" style={{marginTop:"12px",color:"#e2574c"}}>{formError}</p>}
       </form>
       <div className="form-success" id="formSuccess" role="status">Заявка получена. Мы свяжемся с тобой в течение дня.</div>
@@ -404,11 +405,22 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
   </section>
 
   <footer>
-    <span>DeepOF — система, а не курс</span>
-    <a href="https://t.me/+IgSSjYF2dXM2NzRi" target="_blank" rel="noopener" className="footer-link">Telegram-канал</a>
-    <span>Набор закрывается после комплектации потока</span>
+    <span>DeepOF Mentoring</span>
+    <span>Email: paveldronov87@gmail.com · Telegram: <a href="https://t.me/deep0F" target="_blank" rel="noopener" className="footer-link">@deep0F</a></span>
+    <a href="#privacy" onClick={()=>setPrivacyOpen(true)} className="footer-link">Политика конфиденциальности</a>
+    <span className="footer-disclaimer">Информация на сайте носит образовательный характер. Мы не гарантируем доход — результаты зависят от действий участника. Только для лиц 18+.</span>
   </footer>
 </div>
 </main>
+
+{privacyOpen&&<div className="privacy-overlay" role="dialog" aria-modal="true" aria-labelledby="privacy-title" onClick={(e)=>{if(e.target===e.currentTarget){setPrivacyOpen(false);history.replaceState(null,"",location.pathname+location.search)}}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1000,padding:"24px"}}>
+  <div style={{background:"#fff",color:"#111",maxWidth:"560px",width:"100%",maxHeight:"80vh",overflowY:"auto",borderRadius:"12px",padding:"32px"}}>
+    <h3 id="privacy-title" style={{marginTop:0}}>Политика конфиденциальности DeepOF Mentoring</h3>
+    <p>Отправляя заявку на deepof.biz.ua, вы передаёте нам имя и контакт (телефон или Telegram). Мы используем их только чтобы связаться с вами по заявке и рассказать о программе. Мы не продаём ваши данные третьим лицам.</p>
+    <p>Сайт использует файлы cookie и пиксель Meta (Facebook/Instagram), чтобы измерять эффективность рекламы и показывать рекламу посетителям сайта. Meta может получать технические данные о вашем визите и действиях на сайте. Отключить cookie можно в настройках браузера, а рекламу — в настройках рекламы вашего аккаунта Facebook/Instagram.</p>
+    <p>Данные заявок хранятся не дольше 3 лет. Чтобы узнать, какие данные у нас есть, исправить или удалить их, напишите на paveldronov87@gmail.com. Сайт предназначен только для лиц старше 18 лет.</p>
+    <button type="button" className="btn" onClick={()=>{setPrivacyOpen(false);history.replaceState(null,"",location.pathname+location.search)}}>Закрыть</button>
+  </div>
+</div>}
 
 <div className={`sticky-bar ${sticky?"show":""}`}><span className="left">DeepOF — три формата участия, от $449</span><a href="#form" className="btn btn-small">Оставить заявку</a></div></>;}
