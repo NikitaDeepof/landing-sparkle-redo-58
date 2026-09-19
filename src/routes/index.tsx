@@ -166,24 +166,34 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
     <div className="pillars-head">
       <div className="sec-num">04</div>
       <h2>Чем это отличается</h2>
-      <p className="top-note">Большинство наставничеств на этом рынке — это знания и личный опыт одного автора. У нас, кроме личного опыта команды, есть:</p>
+      <p className="top-note">Большинство наставничеств на этом рынке — это знания и личный опыт одного автора. У нас — целая система.</p>
     </div>
 
-    <div className="usp-grid">
-      <div className="usp-card">
-        <div className="usp-index">01</div>
-        <strong>Опыт выпускников</strong>
-        <p>Опыт прошлых потоков, которые получали и продолжают получать результат.</p>
+    <div className="compare-table" role="table" aria-label="Сравнение с типичным наставничеством">
+      <div className="compare-row compare-head" role="row">
+        <div role="columnheader"></div>
+        <div role="columnheader">Типичное наставничество</div>
+        <div role="columnheader" className="col-us">DeepOF</div>
       </div>
-      <div className="usp-card">
-        <div className="usp-index">02</div>
-        <strong>Готовый инструмент</strong>
-        <p>Charme можно включить и начать использовать сразу, а не только прочитать о нём.</p>
+      <div className="compare-row" role="row">
+        <div role="rowheader">Опыт</div>
+        <div className="no">Личный опыт одного автора</div>
+        <div className="yes">Опыт команды + выпускников прошлых потоков</div>
       </div>
-      <div className="usp-card">
-        <div className="usp-index">03</div>
-        <strong>Готовая сеть</strong>
-        <p>Избавляет от месяцев проб и ошибок в трафике.</p>
+      <div className="compare-row" role="row">
+        <div role="rowheader">Инструмент</div>
+        <div className="no">Советы и теория</div>
+        <div className="yes">Charme — можно включить и использовать сразу</div>
+      </div>
+      <div className="compare-row" role="row">
+        <div role="rowheader">Сеть подрядчиков</div>
+        <div className="no">Ищешь и проверяешь сам</div>
+        <div className="yes">Готовая, проверенная — можно запускать трафик завтра</div>
+      </div>
+      <div className="compare-row" role="row">
+        <div role="rowheader">Формат</div>
+        <div className="no">Записанные уроки</div>
+        <div className="yes">Живое сопровождение команды на созвонах</div>
       </div>
     </div>
     <p className="pull">Мы не продаём объём информации. Мы даём то, чем реально пользуемся.</p>
