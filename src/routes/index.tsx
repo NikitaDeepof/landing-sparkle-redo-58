@@ -34,7 +34,7 @@ function Index(){const [active,setActive]=useState("who");const [sticky,setStick
     <div className="stat-strip">
       <div><div className="stat-num">$449</div><div className="stat-label">Старт, три формата</div></div>
       <div><div className="stat-num">11</div><div className="stat-label">Модулей знаний</div></div>
-      <div><div className="stat-num">1.5 года</div><div className="stat-label">Charme в разработке</div></div>
+      <div><div className="stat-num">1.5 года</div><div className="stat-label">Charme в обучении и доработке</div></div>
     </div>
 
     <div className="hero-flow">
