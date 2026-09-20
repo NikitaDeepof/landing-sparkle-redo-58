@@ -77,6 +77,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "theme-color", content: "#000000" },
       { title: "DeepOF — система для запуска агентства креаторов" },
       { name: "description", content: "AI-инструмент для продаж в переписке, сеть подрядчиков по трафику и 11 модулей по управлению агентством в creator economy. Три формата наставничества." },
       { name: "author", content: "DeepOF" },
@@ -88,12 +89,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" },
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      {
+        rel: "icon",
+        href: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%23000'/%3E%3Cpath d='M3 3h9a9 9 0 0 1 0 18H3z' fill='%23EDEDED'/%3E%3Crect x='7.5' y='9' width='6' height='6' fill='%23000'/%3E%3Crect x='9.5' y='11' width='2' height='2' fill='%23D2FF3C'/%3E%3C/svg%3E",
+        type: "image/svg+xml",
+      },
     ],
   }),
   shellComponent: RootShell,
